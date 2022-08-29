@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            //$table indica que columnas se ingresaran a la tabla, junto a eso va un signo de flecha y despues el tipo de dato que quieras usar, luego entre parentesis y comillas simples anotas el nombre de la columna
             $table->id();
-            $table->string('name');
+            $table->string('nombre');
+            $table->string('apellidos');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('contraseña');
             $table->rememberToken();
             $table->timestamps();
         });
