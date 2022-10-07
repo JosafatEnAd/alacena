@@ -18,15 +18,19 @@ use App\Http\Controllers\API\ProductoController;
 
 Route::post('registrar', [UserController::class, 'registrar']);
 Route::post('iniciarsesion', [UserController::class, 'iniciarsesion']);
+Route::get('mostrar', [ProductoController::class, 'mostrar']);
+Route::get('pocaE', [ProductoController::class, 'pocaE']);
+Route::get('sinE', [ProductoController::class, 'sinE']);
 
+
+Route::post('crear', [ProductoController::class, 'crear']);
+Route::post('editar', [ProductoController::class, 'editar']);
+Route::post('borrar', [ProductoController::class, 'borrar']);
+Route::post('agregar', [ProductoController::class, 'agregar']);
+Route::post('quitar', [ProductoController::class, 'quitar']);
+Route::get('salir', [UserController::class, 'salir']);
+Route::get('eliminar', [UserController::class, 'eliminar']);
 Route::group(['middleware' => ["auth:sanctum"]], function () {
-    Route::post('crear', [ProductoController::class, 'crear']);
-    Route::post('editar', [ProductoController::class, 'editar']);
-    Route::post('borrar', [ProductoController::class, 'borrar']);
-    Route::post('agregar', [ProductoController::class, 'agregar']);
-    Route::get('mostrar', [ProductoController::class, 'mostrar']);
-    Route::get('salir', [UserController::class, 'salir']);
-    Route::get('eliminar', [UserController::class, 'eliminar']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

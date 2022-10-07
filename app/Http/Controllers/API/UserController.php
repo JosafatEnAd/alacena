@@ -48,8 +48,6 @@ class UserController extends Controller
                 $token = $user->createToken("auth_token")->plainTextToken;
 
                 return response()->json([
-                    "status" => 1,
-                    "msg" => "Ha iniciado sesión correctamente",
                     "access_token" => $token
                 ]);
             } else {

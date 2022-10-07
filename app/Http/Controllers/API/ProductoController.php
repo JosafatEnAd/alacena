@@ -16,12 +16,14 @@ class ProductoController extends Controller
     public function crear(Request $request)
     {
         $request->validate([
+            'cb' => 'required',
             'nombre' => 'required',
             'precio' => 'required',
             'cantidad' => 'required',
         ]);
 
         $producto = new Producto();
+        $producto->cb = $request->cb;
         $producto->nombre = $request->nombre;
         $producto->precio = $request->precio;
         $producto->cantidad = $request->cantidad;
@@ -37,40 +39,36 @@ class ProductoController extends Controller
     public function editar(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+            'cb' => 'required',
             'nombre' => 'required',
             'precio' => 'required',
             'cantidad' => 'required',
         ]);
 
-        $id = $request->id;
-        $producto =  Producto::find($id);
-        $producto->nombre = $request->nombre;
-        $producto->precio = $request->precio;
-        $producto->cantidad = $request->cantidad;
-
-        $producto->update();
-
+        $cb = $request->cb;
+        $nombre = $request->nombre;
+        $precio = $request->precio;
+        $cantidad = $request->cantidad;
+        $update = DB::table('productos')->where('cb', $cb)->update(['nombre' => $nombre, 'precio' => $precio, 'cantidad' => $cantidad]);
 
         return response()->json([
             "Status" => 1,
-            "msg" => "Producto registrado exitosamente",
+            "msg" => "Producto editado exitosamente",
         ]);
     }
 
     public function borrar(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+            'cb' => 'required',
             //'nombre' => 'required',
             //'precio' => 'required',
             //'cantidad' => 'required',
         ]);
 
-        $id = $request->id;
-        $producto =  Producto::find($id);
-
-        $producto->delete();
+        $cb = $request->cb;
+        $producto =  Producto::find($cb);
+        DB::table('productos')->where('cb', $cb)->delete();
 
 
         return response()->json([
@@ -82,45 +80,58 @@ class ProductoController extends Controller
     public function agregar(Request $request)
     {
         $request->validate([
-            'id' => 'required',
-            //'nombre' => 'required',
-            //'precio' => 'required',
+            'cb' => 'required',
             //'cantidad' => 'required',
         ]);
 
-        $id = $request->id;
-        $producto =  DB::table('productos')->where('id', $id)->value('cantidad');
-        $cantidad = new Value;
-        $producto->cantidad = $cantidad->cantidad;
+        $cb = $request->cb;
+        $producto =  Producto::find($cb);
+        DB::table('productos')->where('cb', $cb)->increment('cantidad', 1);
+
 
         return response()->json([
-            $producto
+            "Status" => 1,
+            "msg" => "Operación realizada exitosamente",
         ]);
     }
 
     public function quitar(Request $request)
     {
         $request->validate([
-            'id' => 'required',
+            'cb' => 'required',
             //'nombre' => 'required',
             //'precio' => 'required',
             //'cantidad' => 'required',
         ]);
 
-        $id = $request->id;
-        $producto =  Producto::find($id);
-
-        $producto->delete();
+        $cb = $request->cb;
+        DB::table('productos')->where('cb', $cb)->decrement('cantidad', 1);
 
 
         return response()->json([
             "Status" => 1,
-            "msg" => "Producto borrado exitosamente",
+            "msg" => "Operación quitar exitosa",
         ]);
     }
     public function mostrar(Request $request)
     {
-        $show = Producto::all('nombre', 'precio', 'cantidad');
+        $show = Producto::all('cb', 'nombre', 'precio', 'cantidad');
+        return response()->json([
+            "Status" => 1,
+            $show
+        ]);
+    }
+    public function pocaE(Request $request)
+    {
+        $show = DB::table('productos')->where('cantidad', '>=', 1)->where('cantidad', '<=', 20)->get(['cb', 'nombre', 'cantidad', 'precio']);
+        return response()->json([
+            "Status" => 1,
+            $show
+        ]);
+    }
+    public function sinE(Request $request)
+    {
+        $show = DB::table('productos')->where('cantidad', '<=', 0)->get(['cb', 'nombre', 'cantidad', 'precio']);
         return response()->json([
             "Status" => 1,
             $show
