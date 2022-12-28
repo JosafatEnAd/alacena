@@ -7,6 +7,7 @@ use App\Models\Producto;
 use Dotenv\Parser\Value;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use PhpParser\Node\Expr\Cast\Int_;
 
 use function GuzzleHttp\Promise\all;
@@ -113,28 +114,25 @@ class ProductoController extends Controller
             "msg" => "Operación quitar exitosa",
         ]);
     }
-    public function mostrar(Request $request)
+    public function mostrar()
     {
         $show = Producto::all('cb', 'nombre', 'precio', 'cantidad');
-        return response()->json([
-            "Status" => 1,
+        return response()->json(
             $show
-        ]);
+        );
     }
-    public function pocaE(Request $request)
+    public function pocaE()
     {
         $show = DB::table('productos')->where('cantidad', '>=', 1)->where('cantidad', '<=', 20)->get(['cb', 'nombre', 'cantidad', 'precio']);
-        return response()->json([
-            "Status" => 1,
+        return response()->json(
             $show
-        ]);
+        );
     }
-    public function sinE(Request $request)
+    public function sinE()
     {
         $show = DB::table('productos')->where('cantidad', '<=', 0)->get(['cb', 'nombre', 'cantidad', 'precio']);
-        return response()->json([
-            "Status" => 1,
+        return response()->json(
             $show
-        ]);
+        );
     }
 }

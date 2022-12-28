@@ -34,7 +34,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function iniciarsesion(Request $request)
+    public function     iniciarsesion(Request $request)
     {
         $request->validate([
             'email' => 'required',
